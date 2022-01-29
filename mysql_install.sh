@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-# This scritp works in Debian 10 with mysql 8
+# date 2022-01-28
+#
+
+# This scritp works with Debian 10 and Debian 11 with mysql 8
+# Probably works with ubuntu I didn't check
 
 export PATH=$PATH:/usr/local/sbin:/sbin:/usr/sbin:/sbin
 
@@ -33,3 +37,9 @@ chmod +x mysql*.deb
 dpkg -i mysql*deb
 
 apt-get update && apt-get install mysql-server -y
+
+clear
+
+echo " Is the mysql enabled? : $(systemctl is-enabled mysql)"
+systemctl status mysql
+echo "Works as expected!!!"
