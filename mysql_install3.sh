@@ -10,11 +10,24 @@
 
 # This scritp works with Debian 10 and Debian 11 with mysql 8
 # Probably works with ubuntu I didn't check
+
+# REPO released at 2022/29/01
+
 repo=https://dev.mysql.com/get/mysql-apt-config_0.8.22-1_all.deb
+repofile=mysql-apt-config_0.8.22-1_all.deb
+
+# It is necessary to update the variable path
 export PATH=$PATH:/usr/local/sbin:/sbin:/usr/sbin:/sbin
 
+
 clear
-apt update && apt upgrade -y
+if [[ -e /usr/bin/apt ]]; then
+	apt update && apt upgrade -y
+else
+	echo "The system isn't debian based"
+	echo "The script just can used in debian based distros"
+	exit 1
+fi
 
 sleep 5
 clear
@@ -24,23 +37,40 @@ apt install gnupg wget lsb-release -y
 sleep 5
 clear
 
-[[ -d /tmp/mysql_temp ]] && { echo "Não será necessário criar o diretório" ; \
-       	sleep 5 ;} || mkdir /tmp/mysql_temp
+if [[ -d /tmp/mysql_temp ]]; then
+	echo "It isn't necessary to create a directory"
+       	sleep 5
+else
+	mkdir /tmp/mysql_temp
+	echo "Making a mysql_temp directory"
+	sleep 5
+fi
+
 
 cd /tmp/mysql_temp
 
 pwd
 sleep 5
 
-# Link get in the official site
+# Link got in the official site
 # https://dev.mysql.com/downloads/repo/apt/
 
-[[ -e mysql*.deb ]] && { echo "Não Precisa fazer download" ;\
-       	sleep 5 ;} || wget "$repo"
+echo "Checking if the repo file exist"
+if [[ -e $repofile ]]; then
+       echo "The file exist. It isn't necessary to do another download file" 
+       	sleep 5
+else
+	echo "Download the repo file"
+       	wget "$repo"
+fi
 
 chmod +x mysql*.deb
+echo "Installing the mysql repo"
+sleep 5
 dpkg -i mysql*deb
 
+echo "installing mysql server"
+sleep 5
 apt-get update && apt-get install mysql-server -y
 
 clear
