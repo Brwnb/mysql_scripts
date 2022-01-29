@@ -18,9 +18,11 @@ repofile=mysql-apt-config_0.8.22-1_all.deb
 
 # It is necessary to update the variable path
 export PATH=$PATH:/usr/local/sbin:/sbin:/usr/sbin:/sbin
-
-
 clear
+
+[[ "$UID" -ne "0" ]] && { echo "Root user is necessary to run \
+this script"; exit 1 ;}
+
 if [[ -e /usr/bin/apt ]]; then
 	apt update && apt upgrade -y
 else
